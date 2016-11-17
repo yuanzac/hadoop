@@ -827,6 +827,14 @@ message ListOpenFilesResponseProto {
   repeated OpenFilesTypeProto types = 3;
 }
 
+message SatisfyStoragePolicyRequestProto {
+  required string src = 1;
+}
+
+message SatisfyStoragePolicyResponseProto {
+
+}
+
 service ClientNamenodeProtocol {
   rpc getBlockLocations(GetBlockLocationsRequestProto)
       returns(GetBlockLocationsResponseProto);
@@ -1013,4 +1021,6 @@ service ClientNamenodeProtocol {
       returns(GetQuotaUsageResponseProto);
   rpc listOpenFiles(ListOpenFilesRequestProto)
       returns(ListOpenFilesResponseProto);
+  rpc satisfyStoragePolicy(SatisfyStoragePolicyRequestProto)
+      returns(SatisfyStoragePolicyResponseProto);
 }
