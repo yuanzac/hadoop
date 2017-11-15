@@ -3388,6 +3388,8 @@ public class PBHelperClient {
       return StoragePolicySatisfyPathStatus.IN_PROGRESS;
     case SUCCESS:
       return StoragePolicySatisfyPathStatus.SUCCESS;
+    case FAILURE:
+      return StoragePolicySatisfyPathStatus.FAILURE;
     case NOT_AVAILABLE:
       return StoragePolicySatisfyPathStatus.NOT_AVAILABLE;
     default:
@@ -3404,6 +3406,8 @@ public class PBHelperClient {
       return HdfsConstants.StoragePolicySatisfyPathStatus.IN_PROGRESS;
     case SUCCESS:
       return HdfsConstants.StoragePolicySatisfyPathStatus.SUCCESS;
+    case FAILURE:
+      return HdfsConstants.StoragePolicySatisfyPathStatus.FAILURE;
     case NOT_AVAILABLE:
       return HdfsConstants.StoragePolicySatisfyPathStatus.NOT_AVAILABLE;
     default:
