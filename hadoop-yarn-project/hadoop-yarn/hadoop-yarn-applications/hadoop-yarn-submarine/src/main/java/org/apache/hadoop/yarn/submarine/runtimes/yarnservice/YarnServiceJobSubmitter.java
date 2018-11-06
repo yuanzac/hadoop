@@ -15,6 +15,7 @@
 package org.apache.hadoop.yarn.submarine.runtimes.yarnservice;
 
 import com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -27,6 +28,7 @@ import org.apache.hadoop.yarn.service.api.records.ConfigFile;
 import org.apache.hadoop.yarn.service.api.records.Resource;
 import org.apache.hadoop.yarn.service.api.records.ResourceInformation;
 import org.apache.hadoop.yarn.service.api.records.Service;
+import org.apache.hadoop.yarn.service.api.records.KerberosPrincipal;
 import org.apache.hadoop.yarn.service.client.ServiceClient;
 import org.apache.hadoop.yarn.submarine.client.cli.param.Quicklink;
 import org.apache.hadoop.yarn.submarine.client.cli.param.RunJobParameters;
@@ -472,6 +474,13 @@ public class YarnServiceJobSubmitter implements JobSubmitter {
     serviceSpec.setName(parameters.getName());
     serviceSpec.setVersion(String.valueOf(System.currentTimeMillis()));
     serviceSpec.setArtifact(getDockerArtifact(parameters.getDockerImageName()));
+    if(StringUtils.isNotBlank(parameters.getServiceKeytab()) && StringUtils
+      .isNotBlank(parameters.getServicePrincipal())) {
+      String keytab = parameters.getServiceKeytab();
+      String principal = parameters.getServicePrincipal();
+      serviceSpec.setKerberosPrincipal(new KerberosPrincipal().keytab(keytab)
+              .principalName(principal));
+    }
 
     handleServiceEnvs(serviceSpec, parameters);
 

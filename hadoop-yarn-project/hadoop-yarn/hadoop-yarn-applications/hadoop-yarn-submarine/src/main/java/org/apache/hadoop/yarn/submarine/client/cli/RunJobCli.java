@@ -125,6 +125,10 @@ public class RunJobCli extends AbstractCli {
         + "if want to link to first worker's 7070 port, and text of quicklink "
         + "is Notebook_UI, user need to specify --quicklink "
         + "Notebook_UI=https://master-0:7070");
+    options.addOption(CliConstants.SERVICE_KEYTAB, true, "Specify service "
+        + "keytab to the job under security environment");
+    options.addOption(CliConstants.SERVICE_PRINCIPAL, true, "Specify service "
+        + "principal to the job under security environment");
     options.addOption("h", "help", false, "Print help");
     return options;
   }

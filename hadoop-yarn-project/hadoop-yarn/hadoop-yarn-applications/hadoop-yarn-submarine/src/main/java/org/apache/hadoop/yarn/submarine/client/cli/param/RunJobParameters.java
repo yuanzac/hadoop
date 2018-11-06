@@ -51,6 +51,9 @@ public class RunJobParameters extends RunParameters {
   private boolean waitJobFinish = false;
   private boolean distributed = false;
 
+  private String serviceKeytab;
+  private String servicePrincipal;
+
   @Override
   public void updateParametersByParsedCommandline(CommandLine parsedCommandLine,
       Options options, ClientContext clientContext)
@@ -143,10 +146,17 @@ public class RunJobParameters extends RunParameters {
     String psLaunchCommand = parsedCommandLine.getOptionValue(
         CliConstants.PS_LAUNCH_CMD);
 
+    String serviceKeytab = parsedCommandLine.getOptionValue(
+            CliConstants.SERVICE_KEYTAB);
+    String servicePrincipal = parsedCommandLine.getOptionValue(
+            CliConstants.SERVICE_PRINCIPAL);
+
     this.setInputPath(input).setCheckpointPath(jobDir).setNumPS(nPS).setNumWorkers(nWorkers)
         .setPSLaunchCmd(psLaunchCommand).setWorkerLaunchCmd(workerLaunchCmd)
         .setPsResource(psResource)
-        .setTensorboardEnabled(tensorboard);
+        .setTensorboardEnabled(tensorboard)
+        .setServiceKeytab(serviceKeytab)
+        .setServicePrincipal(servicePrincipal);
 
     super.updateParametersByParsedCommandline(parsedCommandLine,
         options, clientContext);
@@ -264,5 +274,19 @@ public class RunJobParameters extends RunParameters {
 
   public List<Quicklink> getQuicklinks() {
     return quicklinks;
+  }
+
+  public String getServiceKeytab() { return serviceKeytab; }
+
+  public RunJobParameters setServiceKeytab(String serviceKeytab) {
+    this.serviceKeytab = serviceKeytab;
+    return this;
+  }
+
+  public String getServicePrincipal() { return servicePrincipal; }
+
+  public RunJobParameters setServicePrincipal(String servicePrincipal) {
+    this.servicePrincipal = servicePrincipal;
+    return this;
   }
 }
