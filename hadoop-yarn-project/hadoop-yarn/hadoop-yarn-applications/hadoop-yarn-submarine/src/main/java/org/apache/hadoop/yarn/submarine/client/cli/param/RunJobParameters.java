@@ -51,6 +51,10 @@ public class RunJobParameters extends RunParameters {
   private boolean waitJobFinish = false;
   private boolean distributed = false;
 
+  private String keytab;
+  private String principal;
+  private boolean distributeKeytab = false;
+
   @Override
   public void updateParametersByParsedCommandline(CommandLine parsedCommandLine,
       Options options, ClientContext clientContext)
@@ -78,6 +82,12 @@ public class RunJobParameters extends RunParameters {
       throw new ParseException("Only specified one worker but non-zero PS, "
           + "please double check.");
     }
+
+    String keytab = parsedCommandLine.getOptionValue(
+        CliConstants.KEYTAB);
+    String principal = parsedCommandLine.getOptionValue(
+        CliConstants.PRINCIPAL);
+    CliUtils.doLoginIfSecure(keytab, principal);
 
     workerResource = null;
     if (nWorkers > 0) {
@@ -143,10 +153,16 @@ public class RunJobParameters extends RunParameters {
     String psLaunchCommand = parsedCommandLine.getOptionValue(
         CliConstants.PS_LAUNCH_CMD);
 
+    boolean distributeKeytab = parsedCommandLine.hasOption(CliConstants
+        .DISTRIBUTE_KEYTAB);
+
     this.setInputPath(input).setCheckpointPath(jobDir).setNumPS(nPS).setNumWorkers(nWorkers)
         .setPSLaunchCmd(psLaunchCommand).setWorkerLaunchCmd(workerLaunchCmd)
         .setPsResource(psResource)
-        .setTensorboardEnabled(tensorboard);
+        .setTensorboardEnabled(tensorboard)
+        .setKeytab(keytab)
+        .setPrincipal(principal)
+        .setDistributeKeytab(distributeKeytab);
 
     super.updateParametersByParsedCommandline(parsedCommandLine,
         options, clientContext);
@@ -264,5 +280,26 @@ public class RunJobParameters extends RunParameters {
 
   public List<Quicklink> getQuicklinks() {
     return quicklinks;
+  }
+
+  public String getKeytab() { return keytab; }
+
+  public RunJobParameters setKeytab(String keytab) {
+    this.keytab = keytab;
+    return this;
+  }
+
+  public String getPrincipal() { return principal; }
+
+  public RunJobParameters setPrincipal(String principal) {
+    this.principal = principal;
+    return this;
+  }
+
+  public boolean isDistributeKeytab() { return distributeKeytab; }
+
+  public RunJobParameters setDistributeKeytab(boolean distributeKeytab) {
+    this.distributeKeytab = distributeKeytab;
+    return this;
   }
 }
