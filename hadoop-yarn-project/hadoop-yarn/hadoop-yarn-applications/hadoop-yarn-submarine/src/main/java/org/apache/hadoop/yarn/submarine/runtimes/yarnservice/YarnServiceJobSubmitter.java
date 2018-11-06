@@ -56,6 +56,9 @@ import java.util.StringTokenizer;
 
 import static org.apache.hadoop.fs.CommonConfigurationKeysPublic.HADOOP_SECURITY_AUTHENTICATION;
 
+
+import static org.apache.hadoop.yarn.service.utils.ServiceApiUtil.jsonSerDeser;
+
 /**
  * Submit a job to cluster
  */
@@ -470,6 +473,14 @@ public class YarnServiceJobSubmitter implements JobSubmitter {
   private Service createServiceByParameters(RunJobParameters parameters)
       throws IOException {
     componentToLocalLaunchScriptPath.clear();
+
+    if(StringUtils.isNotBlank(parameters.getSpecFile())) {
+      FileSystem fs = FileSystem.get(clientContext.getYarnConfig());
+      serviceSpec = jsonSerDeser.load(fs,
+        new Path(parameters.getSpecFile()));
+      return serviceSpec;
+    }
+
     serviceSpec = new Service();
     serviceSpec.setName(parameters.getName());
     serviceSpec.setVersion(String.valueOf(System.currentTimeMillis()));

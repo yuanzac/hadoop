@@ -129,6 +129,8 @@ public class RunJobCli extends AbstractCli {
         + "keytab to the job under security environment");
     options.addOption(CliConstants.SERVICE_PRINCIPAL, true, "Specify service "
         + "principal to the job under security environment");
+    options.addOption(CliConstants.SPEC, true, "Spec file for all the "
+        + "parameters of the job");
     options.addOption("h", "help", false, "Print help");
     return options;
   }

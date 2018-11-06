@@ -17,6 +17,7 @@ package org.apache.hadoop.yarn.submarine.client.cli.param;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.yarn.api.records.Resource;
 import org.apache.hadoop.yarn.exceptions.YarnException;
 import org.apache.hadoop.yarn.submarine.client.cli.CliConstants;
@@ -54,10 +55,18 @@ public class RunJobParameters extends RunParameters {
   private String serviceKeytab;
   private String servicePrincipal;
 
+  private String specFile;
+
   @Override
   public void updateParametersByParsedCommandline(CommandLine parsedCommandLine,
       Options options, ClientContext clientContext)
       throws ParseException, IOException, YarnException {
+
+    String specFile = parsedCommandLine.getOptionValue(CliConstants.SPEC);
+    if (StringUtils.isNotBlank(specFile)) {
+      this.setSpecFile(specFile);
+      return;
+    }
 
     String input = parsedCommandLine.getOptionValue(CliConstants.INPUT_PATH);
     String jobDir = parsedCommandLine.getOptionValue(CliConstants.CHECKPOINT_PATH);
@@ -287,6 +296,13 @@ public class RunJobParameters extends RunParameters {
 
   public RunJobParameters setServicePrincipal(String servicePrincipal) {
     this.servicePrincipal = servicePrincipal;
+    return this;
+  }
+
+  public String getSpecFile() { return specFile; }
+
+  public RunJobParameters setSpecFile(String specFile) {
+    this.specFile = specFile;
     return this;
   }
 }
